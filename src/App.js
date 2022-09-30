@@ -1,57 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import "./App.css";
+import Home from "./pages/home/Home";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import UserList from "./pages/userList/UserList";
+import User from "./pages/user/User";
+import NewUser from "./pages/newUser/NewUser";
+import ProductList from "./pages/productList/ProductList";
+import Product from "./pages/product/Product";
+import NewProduct from "./pages/newProduct/NewProduct";
+import Login from "./pages/login/Login";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
+import Nav from "./topnav";
+import { useSelector } from "react-redux";
 
 function App() {
+  const admin = useSelector((state) => state.user.currentUser.isAdmin);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+          <>
+          
+            <Route element={<ProtectedRoutes />}>
+              <Route exact path="/" element={ <Home /> } />
+              <Route path="/users" element={ <UserList /> } />
+              <Route path="/user/:userId" element={ <User /> } />
+              <Route path="/newUser" element={ <NewUser /> } />
+              <Route path="/products" element={ <ProductList /> } />
+              <Route path="/product/:productId" element={ <Product /> } />
+              <Route path="/newproduct" element={ <NewProduct /> } />
+            </Route>
+            <Route path="/login" element={admin ? <Navigate to="/" /> : <Login />} />
+
+              
+          </>
+      </Routes>
+    </Router>
   );
 }
 

@@ -3,12 +3,16 @@ import DataGrid from "@mui/material/Grid";
 import DeleteOutline from "@mui/material/Icon";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { productData } from "../../dummyData";
+import { useDispatch,
+  //  useSelector 
+  } from "react-redux";
 import { deleteProduct, getProducts } from "../../features/counter/apiCalls";
 
 export default function ProductList() {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.product.products);
+  // const products = useSelector((state) => state.product.products);
+  const products = () => productData
 
   useEffect(() => {
     getProducts(dispatch);
@@ -27,8 +31,8 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            <img className="productListImg" src={params.row.img} alt="" />
-            {params.row.title}
+            <img className="productListImg" src={params?.row?.img} alt="" />
+            {params?.row?.title}
           </div>
         );
       },
@@ -46,12 +50,12 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/product/" + params.row._id}>
+            <Link to={"/product/" + params?.row?._id}>
               <button className="productListEdit">Edit</button>
             </Link>
             <DeleteOutline
               className="productListDelete"
-              onClick={() => handleDelete(params.row._id)}
+              onClick={() => handleDelete(params?.row?._id)}
             />
           </>
         );
@@ -65,7 +69,7 @@ export default function ProductList() {
         rows={products}
         disableSelectionOnClick
         columns={columns}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row?._id}
         pageSize={8}
         checkboxSelection
       />

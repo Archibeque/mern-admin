@@ -17,7 +17,7 @@ import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { useSelector } from "react-redux";
 
 function App() {
-  const admin = useSelector((state) => state.user.currentUser.isAdmin);
+  const admin = useSelector((state) => state.user.currentUser?.isAdmin);
   return (
     <Router>
       <Routes>

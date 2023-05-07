@@ -6,7 +6,7 @@
 .pnp.js
 src/firebase.js
 src/topnav.js
-src/dummyData.js
+
 
 # testing
 /coverage

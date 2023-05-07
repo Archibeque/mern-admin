@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { userRequest } from "../../requestMethods";
 import "./widgetLg.css";
+import moment from "moment";
 
 export default function WidgetLg() {
   const [orders, setOrders] = useState([]);
@@ -32,10 +33,7 @@ export default function WidgetLg() {
             <td className="widgetLgUser">
               <span className="widgetLgName">{order.userId}</span>
             </td>
-            <td className="widgetLgDate">{
-            // format(order.createdAt) 
-            new Date.now()
-            }</td>
+            <td className="widgetLgDate">{moment(order.createdAt).fromNow()  }</td>
             <td className="widgetLgAmount">${order.amount}</td>
             <td className="widgetLgStatus">
               <Button type={order.status} />

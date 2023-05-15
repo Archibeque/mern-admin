@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../features/counter/apiCalls";
+import './Login.css'
+
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -13,7 +15,7 @@ const Login = () => {
   };
 
   return (
-    <div
+    <div className="logincontainer"
       style={{
         height: "100vh",
         display: "flex",

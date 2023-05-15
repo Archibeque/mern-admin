@@ -4,9 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
-src/firebase.js
 src/topnav.js
-
+.env
 
 # testing
 /coverage

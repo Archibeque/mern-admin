@@ -22,7 +22,7 @@ return (
             </div>
         </>
 
-    ): <Navigate to="/login"  /> } 
+    ): <Navigate to="/landing"  /> } 
     </>
     )
   

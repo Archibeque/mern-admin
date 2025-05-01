@@ -13,13 +13,19 @@ import ProductList from "./pages/productList/ProductList";
 import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import LandingPage from "./pages/landing/landing"
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ForgotPassword from "./pages/forgot/Forgot";
 
 function App() {
   const admin = useSelector((state) => state.user.currentUser?.isAdmin);
   return (
     <Router>
+    <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
           <>
           
@@ -32,7 +38,10 @@ function App() {
               <Route path="/product/:productId" element={ <Product /> } />
               <Route path="/newproduct" element={ <NewProduct /> } />
             </Route>
-            <Route path="/login" element={admin ? <Navigate to="/" /> : <Login />} />
+            <Route path="/login" element={ <Login /> } />
+            <Route path="/register" element={ <Register />} />
+            <Route path="/forgot-password" element={ <ForgotPassword/> } />
+            <Route path="/landing" element={admin ? <Navigate to="/" /> : <LandingPage />} />
 
               
           </>

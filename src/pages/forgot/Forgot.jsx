@@ -21,7 +21,7 @@ const ForgotPassword = () => {
     <div className="forgot">
      <header className="landing__header">
         <div className="landing__logo">
-          <Link to="/"><img src='logon.png' width={120} height={60} /></Link>
+          <Link to="/"><img src='logon.png' width={120} height={60} alt="" /></Link>
         </div>
         <nav className="landing__nav"
         // {`landing__nav 

@@ -15,15 +15,41 @@ import {
   addProductSuccess,
 } from "./productRedux";
 
+export const registerAdmin = async (user) => {
+  try {
+    const res = await publicRequest.post("/auth/admin-register", user);
+  console.log("res here",res)
+
+    return res.data;
+  } catch (err) {
+    console.error("Registration failed", err);
+    throw err;
+  }
+};
+
+// export const login = async (dispatch, user) => {
+//   dispatch(loginStart());
+//   try {
+//     const res = await publicRequest.post("/auth/login", user);
+//     console.log(res.data)
+//     dispatch(loginSuccess(res.data));
+//   } catch (err) {
+//     dispatch(loginFailure());
+//   }
+// };
+
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
     const res = await publicRequest.post("/auth/login", user);
     dispatch(loginSuccess(res.data));
+    return res; 
   } catch (err) {
     dispatch(loginFailure());
+    throw err; 
   }
 };
+
 
 export const getProducts = async (dispatch) => {
   dispatch(getProductStart());
@@ -32,6 +58,8 @@ export const getProducts = async (dispatch) => {
     dispatch(getProductSuccess(res.data));
   } catch (err) {
     dispatch(getProductFailure());
+    throw err; 
+    
   }
 };
 
@@ -42,6 +70,8 @@ export const deleteProduct = async (id, dispatch) => {
     dispatch(deleteProductSuccess(id));
   } catch (err) {
     dispatch(deleteProductFailure());
+    throw err; 
+
   }
 };
 
@@ -52,6 +82,7 @@ export const updateProduct = async (id, product, dispatch) => {
     dispatch(updateProductSuccess({ id, product }));
   } catch (err) {
     dispatch(updateProductFailure());
+    throw err; 
   }
 };
 export const addProduct = async (product, dispatch) => {
@@ -61,5 +92,7 @@ export const addProduct = async (product, dispatch) => {
     dispatch(addProductSuccess(res.data));
   } catch (err) {
     dispatch(addProductFailure());
+    throw err; 
+
   }
 };

@@ -1,4 +1,4 @@
-.logincontainer{
+/* .logincontainer{
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -13,4 +13,9 @@
     background-repeat: no-repeat;
     
 
-}
+} */
+
+
+
+/* src/pages/login/login.css */
+@import "../register/Register.css";

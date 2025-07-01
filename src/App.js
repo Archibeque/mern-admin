@@ -13,7 +13,7 @@ import ProductList from "./pages/productList/ProductList";
 import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
+import RegisterAdmin from "./pages/register/Register";
 import LandingPage from "./pages/landing/landing"
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { useSelector } from "react-redux";
@@ -39,7 +39,7 @@ function App() {
               <Route path="/newproduct" element={ <NewProduct /> } />
             </Route>
             <Route path="/login" element={ <Login /> } />
-            <Route path="/register" element={ <Register />} />
+            <Route path="/register" element={ <RegisterAdmin />} />
             <Route path="/forgot-password" element={ <ForgotPassword/> } />
             <Route path="/landing" element={admin ? <Navigate to="/" /> : <LandingPage />} />
 

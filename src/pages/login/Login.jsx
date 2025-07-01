@@ -4,86 +4,44 @@ import { login } from "../../features/counter/apiCalls";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Login.css";
+import PublicHeader from "../../components/publicHeader/publicHeader";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
-  const handleClick = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await login(dispatch, { username, password });
-      toast.success("Login Successful!");
+      toast.success("Login successful!");
       navigate("/");
-    } catch (error) {
-      toast.error("Login Failed. Please try again.");
+    } catch {
+      toast.error("Login failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-     <header className="landing__header">
-        <div className="landing__logo">
-          <Link to="/"><img src='logon.png' width={120} height={60} /></Link>
-        </div>
-        <nav className=
-        {`landing__nav 
-        ${menuOpen ? 'landing__nav--open' : ''}
-        `}
-        >
-          
-        </nav>
-
-        <div className="landing__auth">
-          <button className="landing__login" onClick={() => navigate('/login')}>Log in</button>
-          <button className="landing__signup" onClick={() => navigate('/register')}>Sign up</button>
-        </div>
-
-        <div className="landing__hamburger" 
-        // onClick={toggleMenu}
-        >
-          <span className="landing__bar"></span>
-          <span className="landing__bar"></span>
-          <span className="landing__bar"></span>
-        </div>
-      </header>
-    <div className="login">     
-      <div className="login__box">
-        <h2 className="login__title">Login</h2>
-        <input
-          className="login__input"
-          type="text"
-          placeholder="Username"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          className="login__input"
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button className="login__button" onClick={handleClick}>
-          Login
-        </button>
-        <p className="login__forgot" onClick={() => navigate('/forgot-password')}>Forgot Password?</p>
+        <PublicHeader />
+    <div className="auth-container">
+      <div className="auth-box">
+        <div className="auth-info-box">
+            <strong>Note:</strong> New accounts must be invited by an admin. Use  <strong>nnadidan:ready007</strong> to log in.
+          </div>
+        <h2>Sign In</h2>
+        <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} disabled={loading} />
+        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} disabled={loading} />
+        <button onClick={handleLogin}>Login</button>
+        <p>Don't have an account? <Link to="/register">Register</Link></p>
       </div>
-      
     </div>
-    <footer className="landing__footer">
-        <p>© 2025 Nnadidan. All rights reserved.</p>
-      </footer>
     </>
   );
 };

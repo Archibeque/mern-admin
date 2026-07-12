@@ -14,7 +14,7 @@ import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/Login";
 import RegisterAdmin from "./pages/register/Register";
-import LandingPage from "./pages/landing/landing"
+import LandingPage from "./pages/landing/landing";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -23,28 +23,33 @@ import ForgotPassword from "./pages/forgot/Forgot";
 
 function App() {
   const admin = useSelector((state) => state.user.currentUser?.isAdmin);
+
   return (
     <Router>
-    <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
-          <>
-          
-            <Route element={<ProtectedRoutes />}>
-              <Route exact path="/" element={ <Home /> } />
-              <Route path="/users" element={ <UserList /> } />
-              <Route path="/user/:userId" element={ <User /> } />
-              <Route path="/newUser" element={ <NewUser /> } />
-              <Route path="/products" element={ <ProductList /> } />
-              <Route path="/product/:productId" element={ <Product /> } />
-              <Route path="/newproduct" element={ <NewProduct /> } />
-            </Route>
-            <Route path="/login" element={ <Login /> } />
-            <Route path="/register" element={ <RegisterAdmin />} />
-            <Route path="/forgot-password" element={ <ForgotPassword/> } />
-            <Route path="/landing" element={admin ? <Navigate to="/" /> : <LandingPage />} />
+        {/* Public routes */}
+        <Route
+          path="/landing"
+          element={admin ? <Navigate to="/" /> : <LandingPage />}
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterAdmin />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-              
-          </>
+        {/* Protected routes */}
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/user/:userId" element={<User />} />
+          <Route path="/newUser" element={<NewUser />} />
+          <Route path="/products" element={<ProductList />} />
+          <Route path="/product/:productId" element={<Product />} />
+          <Route path="/newproduct" element={<NewProduct />} />
+        </Route>
+
+        {/* Catch-all → landing */}
+        <Route path="*" element={<Navigate to="/landing" replace />} />
       </Routes>
     </Router>
   );

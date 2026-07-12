@@ -1,94 +1,79 @@
 import { useState } from "react";
-import "./newProduct.css";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import app from "../../firebase";
-import { addProduct } from "../../features/counter/apiCalls";
 import { useDispatch } from "react-redux";
-
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { addProductFailure, addProductStart, addProductSuccess } from "../../features/counter/productRedux";
+import { userRequest } from "../../requestMethods";
+import "./newProduct.css";
 
 export default function NewProduct() {
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [cat, setCat] = useState([]);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setInputs((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
   const handleCat = (e) => {
-    setCat(e.target.value.split(","));
+    setCat(e.target.value.split(",").map((c) => c.trim()));
   };
 
-  const handleClick = (e) => {
+  const handleFile = (e) => {
+    const selected = e.target.files[0];
+    setFile(selected);
+    setPreview(URL.createObjectURL(selected));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const fileName = new Date().getTime() + file.name;
-    const storage = getStorage(app);
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    if (!file) return toast.error("Please select an image.");
+    if (!inputs.title) return toast.error("Title is required.");
 
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-        }
-      },
-      (error) => {
-        // Handle unsuccessful uploads
-      },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const product = { ...inputs, img: downloadURL, categories: cat };
-          addProduct(product, dispatch);
-        });
-      }
-    );
+    setLoading(true);
+    dispatch(addProductStart());
+    try {
+      // Send file + fields to backend; backend uploads to Supabase and returns the product with img URL
+      const formData = new FormData();
+      formData.append("image", file);
+      Object.entries(inputs).forEach(([k, v]) => formData.append(k, v));
+      cat.forEach((c) => formData.append("categories[]", c));
+
+      const res = await userRequest.post("/products", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      dispatch(addProductSuccess(res.data));
+      toast.success("Product created!");
+      navigate("/products");
+    } catch {
+      dispatch(addProductFailure());
+      toast.error("Failed to create product.");
+    } finally {
+      setLoading(false);
+    }
   };
-  console.log(inputs, file, cat)
 
   return (
     <div className="newProduct">
       <h1 className="addProductTitle">New Product</h1>
-      <form className="addProductForm">
+      <form className="addProductForm" onSubmit={handleSubmit}>
         <div className="addProductItem">
           <label>Image</label>
-          <input
-            type="file"
-            id="file"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
+          {preview && (
+            <img src={preview} alt="preview" className="addProductPreview" />
+          )}
+          <input type="file" accept="image/*" onChange={handleFile} />
         </div>
         <div className="addProductItem">
           <label>Title</label>
           <input
             name="title"
             type="text"
-            placeholder="Apple Airpods"
+            placeholder="e.g. Floral Sundress"
             onChange={handleChange}
           />
         </div>
@@ -97,7 +82,7 @@ export default function NewProduct() {
           <input
             name="desc"
             type="text"
-            placeholder="description..."
+            placeholder="Short description..."
             onChange={handleChange}
           />
         </div>
@@ -112,17 +97,21 @@ export default function NewProduct() {
         </div>
         <div className="addProductItem">
           <label>Categories</label>
-          <input type="text" placeholder="jeans,skirts" onChange={handleCat} />
+          <input
+            type="text"
+            placeholder="dresses, summer, casual"
+            onChange={handleCat}
+          />
         </div>
         <div className="addProductItem">
-          <label>Stock</label>
+          <label>In Stock</label>
           <select name="inStock" onChange={handleChange}>
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
         </div>
-        <button onClick={handleClick} className="addProductButton">
-          Create
+        <button type="submit" className="addProductButton" disabled={loading}>
+          {loading ? "Uploading..." : "Create"}
         </button>
       </form>
     </div>

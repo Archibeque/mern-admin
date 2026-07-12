@@ -29,3 +29,20 @@
     color: red;
     cursor: pointer;
 }
+
+.productListHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.productListCreate {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 8px;
+  background: darkblue;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}

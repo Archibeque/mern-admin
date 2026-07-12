@@ -1,64 +1,50 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { publicRequest } from "../../requestMethods";
+import PublicHeader from "../../components/publicHeader/publicHeader";
 import "./forgotPassword.css";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const handleReset = (e) => {
+  const handleReset = async (e) => {
     e.preventDefault();
-    // TODO: Integrate API for reset link
-    if (!email) {
-      toast.error("Please enter your email.");
-    } else {
-      toast.success("Password reset link sent (mock).");
+    if (!email) return toast.error("Please enter your email.");
+    setLoading(true);
+    try {
+      await publicRequest.post("/auth/forgot-password", { email });
+      toast.success("Password reset link sent! Check your email.");
+    } catch {
+      toast.error("Failed to send reset link.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="forgot">
-     <header className="landing__header">
-        <div className="landing__logo">
-          <Link to="/"><img src='logon.png' width={120} height={60} alt="" /></Link>
+    <>
+      <PublicHeader />
+      <div className="forgot">
+        <div className="forgot__box">
+          <h2 className="forgot__title">Forgot Password</h2>
+          <input
+            className="forgot__input"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button
+            className="forgot__button"
+            onClick={handleReset}
+            disabled={loading}
+          >
+            {loading ? "Sending..." : "Send Reset Link"}
+          </button>
         </div>
-        <nav className="landing__nav"
-        // {`landing__nav 
-        // ${menuOpen ? 'landing__nav--open' : ''}
-        // `}
-        >
-          
-        </nav>
-
-        <div className="landing__auth">
-          <button className="landing__login" onClick={() => navigate('/login')}>Log in</button>
-          <button className="landing__signup" onClick={() => navigate('/register')}>Sign up</button>
-        </div>
-
-        <div className="landing__hamburger" 
-        // onClick={toggleMenu}
-        >
-          <span className="landing__bar"></span>
-          <span className="landing__bar"></span>
-          <span className="landing__bar"></span>
-        </div>
-      </header>
-
-      <div className="forgot__box">
-        <h2 className="forgot__title">Forgot Password</h2>
-        <input
-          className="forgot__input"
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button className="forgot__button" onClick={handleReset}>
-          Send Reset Link
-        </button>
       </div>
-    </div>
+    </>
   );
 };
 

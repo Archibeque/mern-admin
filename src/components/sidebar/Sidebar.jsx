@@ -1,19 +1,30 @@
 import "./sidebar.css";
-import LineStyle from "@mui/material/Icon";
-import Timeline from "@mui/material/Icon";
-import TrendingUp from "@mui/material/Icon";
-import PermIdentity from "@mui/material/Icon";
-import Storefront from "@mui/material/Icon";
-import AttachMoney from "@mui/material/Icon";
-import BarChart from "@mui/material/Icon";
-import MailOutline from "@mui/material/Icon";
-import DynamicFeed from "@mui/material/Icon";
-import ChatBubbleOutline from "@mui/material/Icon";
-import WorkOutline from "@mui/material/Icon";
-import Report from "@mui/material/Icon";
-import { Link } from "react-router-dom";
+import LineStyleIcon from "@mui/icons-material/LineStyle";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import ReportIcon from "@mui/icons-material/Report";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/counter/userRedux";
 
 export default function Sidebar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/landing");
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -21,17 +32,17 @@ export default function Sidebar() {
           <h3 className="sidebarTitle">Dashboard</h3>
           <ul className="sidebarList">
             <Link to="/" className="link">
-            <li className="sidebarListItem active">
-              <LineStyle className="sidebarIcon" />
-              Home
-            </li>
+              <li className="sidebarListItem active">
+                <LineStyleIcon className="sidebarIcon" />
+                Home
+              </li>
             </Link>
             <li className="sidebarListItem disabled">
-              <Timeline className="sidebarIcon" />
+              <TimelineIcon className="sidebarIcon" />
               Analytics
             </li>
             <li className="sidebarListItem disabled">
-              <TrendingUp className="sidebarIcon" />
+              <TrendingUpIcon className="sidebarIcon" />
               Sales
             </li>
           </ul>
@@ -41,22 +52,22 @@ export default function Sidebar() {
           <ul className="sidebarList">
             <Link to="/users" className="link">
               <li className="sidebarListItem">
-                <PermIdentity className="sidebarIcon" />
+                <PermIdentityIcon className="sidebarIcon" />
                 Users
               </li>
             </Link>
             <Link to="/products" className="link">
               <li className="sidebarListItem">
-                <Storefront className="sidebarIcon" />
+                <StorefrontIcon className="sidebarIcon" />
                 Products
               </li>
             </Link>
             <li className="sidebarListItem disabled">
-              <AttachMoney className="sidebarIcon" />
+              <AttachMoneyIcon className="sidebarIcon" />
               Transactions
             </li>
             <li className="sidebarListItem disabled">
-              <BarChart className="sidebarIcon" />
+              <BarChartIcon className="sidebarIcon" />
               Reports
             </li>
           </ul>
@@ -65,15 +76,15 @@ export default function Sidebar() {
           <h3 className="sidebarTitle">Notifications</h3>
           <ul className="sidebarList">
             <li className="sidebarListItem disabled">
-              <MailOutline className="sidebarIcon" />
+              <MailOutlineIcon className="sidebarIcon" />
               Mail
             </li>
             <li className="sidebarListItem disabled">
-              <DynamicFeed className="sidebarIcon" />
+              <DynamicFeedIcon className="sidebarIcon" />
               Feedback
             </li>
             <li className="sidebarListItem disabled">
-              <ChatBubbleOutline className="sidebarIcon" />
+              <ChatBubbleOutlineIcon className="sidebarIcon" />
               Messages
             </li>
           </ul>
@@ -82,16 +93,24 @@ export default function Sidebar() {
           <h3 className="sidebarTitle">Staff</h3>
           <ul className="sidebarList">
             <li className="sidebarListItem disabled">
-              <WorkOutline className="sidebarIcon" />
+              <WorkOutlineIcon className="sidebarIcon" />
               Manage
             </li>
             <li className="sidebarListItem disabled">
-              <Timeline className="sidebarIcon" />
+              <TimelineIcon className="sidebarIcon" />
               Analytics
             </li>
             <li className="sidebarListItem disabled">
-              <Report className="sidebarIcon" />
+              <ReportIcon className="sidebarIcon" />
               Reports
+            </li>
+          </ul>
+        </div>
+        <div className="sidebarMenu">
+          <ul className="sidebarList">
+            <li className="sidebarListItem" onClick={handleLogout} style={{ cursor: "pointer" }}>
+              <ExitToAppIcon className="sidebarIcon" />
+              Logout
             </li>
           </ul>
         </div>

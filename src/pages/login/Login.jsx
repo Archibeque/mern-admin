@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../features/counter/apiCalls";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Login.css";
 import PublicHeader from "../../components/publicHeader/publicHeader";
 
+const TEST_USER = "nnadidan";
+const TEST_PASS = "ready007";
+
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const location = useLocation();
+  const isTest = new URLSearchParams(location.search).get("test") === "true";
+
+  const [username, setUsername] = useState(isTest ? TEST_USER : "");
+  const [password, setPassword] = useState(isTest ? TEST_PASS : "");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,19 +35,33 @@ const Login = () => {
 
   return (
     <>
-        <PublicHeader />
-    <div className="auth-container">
-      <div className="auth-box">
-        <div className="auth-info-box">
-            <strong>Note:</strong> New accounts must be invited by an admin. Use  <strong>nnadidan:ready007</strong> to log in.
+      <PublicHeader />
+      <div className="auth-container">
+        <div className="auth-box">
+          <div className="auth-info-box">
+            <strong>Note:</strong> New accounts must be invited by an admin. Use <strong>nnadidan:ready007</strong> to log in.
           </div>
-        <h2>Sign In</h2>
-        <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} disabled={loading} />
-        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} disabled={loading} />
-        <button onClick={handleLogin}>Login</button>
-        <p>Don't have an account? <Link to="/register">Register</Link></p>
+          <h2>Sign In</h2>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            disabled={loading}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
+          />
+          <button onClick={handleLogin} disabled={loading}>
+            {loading ? "Signing in..." : "Login"}
+          </button>
+          <p>Don't have an account? <Link to="/register">Register</Link></p>
+        </div>
       </div>
-    </div>
     </>
   );
 };

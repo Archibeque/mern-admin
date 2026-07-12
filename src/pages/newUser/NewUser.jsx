@@ -1,53 +1,146 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { userRequest } from "../../requestMethods";
 import "./newUser.css";
 
 export default function NewUser() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    username: "",
+    fullName: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
+    gender: "male",
+    active: "yes",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.username || !form.email || !form.password) {
+      return toast.error("Username, email and password are required.");
+    }
+    setLoading(true);
+    try {
+      await userRequest.post("/users", form);
+      toast.success("User created!");
+      navigate("/users");
+    } catch {
+      toast.error("Failed to create user.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="newUser">
       <h1 className="newUserTitle">New User</h1>
-      <form className="newUserForm">
+      <form className="newUserForm" onSubmit={handleSubmit}>
         <div className="newUserItem">
           <label>Username</label>
-          <input type="text" placeholder="john" />
+          <input
+            name="username"
+            type="text"
+            placeholder="john"
+            onChange={handleChange}
+          />
         </div>
         <div className="newUserItem">
           <label>Full Name</label>
-          <input type="text" placeholder="John Smith" />
+          <input
+            name="fullName"
+            type="text"
+            placeholder="John Smith"
+            onChange={handleChange}
+          />
         </div>
         <div className="newUserItem">
           <label>Email</label>
-          <input type="email" placeholder="john@gmail.com" />
+          <input
+            name="email"
+            type="email"
+            placeholder="john@gmail.com"
+            onChange={handleChange}
+          />
         </div>
         <div className="newUserItem">
           <label>Password</label>
-          <input type="password" placeholder="password" />
+          <input
+            name="password"
+            type="password"
+            placeholder="password"
+            onChange={handleChange}
+          />
         </div>
         <div className="newUserItem">
           <label>Phone</label>
-          <input type="text" placeholder="+1 123 456 78" />
+          <input
+            name="phone"
+            type="text"
+            placeholder="+1 123 456 78"
+            onChange={handleChange}
+          />
         </div>
         <div className="newUserItem">
           <label>Address</label>
-          <input type="text" placeholder="New York | USA" />
+          <input
+            name="address"
+            type="text"
+            placeholder="New York | USA"
+            onChange={handleChange}
+          />
         </div>
         <div className="newUserItem">
           <label>Gender</label>
           <div className="newUserGender">
-            <input type="radio" name="gender" id="male" value="male" />
-            <label for="male">Male</label>
-            <input type="radio" name="gender" id="female" value="female" />
-            <label for="female">Female</label>
-            <input type="radio" name="gender" id="other" value="other" />
-            <label for="other">Other</label>
+            <input
+              type="radio"
+              name="gender"
+              id="male"
+              value="male"
+              defaultChecked
+              onChange={handleChange}
+            />
+            <label htmlFor="male">Male</label>
+            <input
+              type="radio"
+              name="gender"
+              id="female"
+              value="female"
+              onChange={handleChange}
+            />
+            <label htmlFor="female">Female</label>
+            <input
+              type="radio"
+              name="gender"
+              id="other"
+              value="other"
+              onChange={handleChange}
+            />
+            <label htmlFor="other">Other</label>
           </div>
         </div>
         <div className="newUserItem">
           <label>Active</label>
-          <select className="newUserSelect" name="active" id="active">
+          <select
+            className="newUserSelect"
+            name="active"
+            onChange={handleChange}
+          >
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
         </div>
-        <button className="newUserButton">Create</button>
+        <button type="submit" className="newUserButton" disabled={loading}>
+          {loading ? "Creating..." : "Create"}
+        </button>
       </form>
     </div>
   );

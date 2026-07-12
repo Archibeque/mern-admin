@@ -5,13 +5,15 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.7",
+    "@mui/x-data-grid": "^5.17.9",
     "@reduxjs/toolkit": "^1.8.5",
+    "@supabase/supabase-js": "^2.39.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "axios": "^0.27.2",
-    "firebase": "^9.10.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -22,6 +24,14 @@
     "recharts": "^2.1.14",
     "redux-persist": "^6.0.0",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "^16.18.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/react-redux": "^7.1.25",
+    "@types/redux-persist": "^4.3.1",
+    "typescript": "^4.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
